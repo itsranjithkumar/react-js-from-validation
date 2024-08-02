@@ -9,6 +9,7 @@ import Unauthorized from './components/Unauthorized';
 import Lounge from './components/Lounge';
 import LinkPage from './components/LinkPage';
 import RequireAuth from './components/RequireAuth';
+import persistLogin from './components/persistLogin';
 import { Routes, Route } from 'react-router-dom';
 
 const ROLES = {
@@ -44,6 +45,7 @@ function App() {
         <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
           <Route path="lounge" element={<Lounge />} />
         </Route>
+      
 
         {/* catch all */}
         <Route path="*" element={<Missing />} />
