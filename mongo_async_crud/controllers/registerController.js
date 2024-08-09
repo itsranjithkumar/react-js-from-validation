@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt');
 
 const handleNewUser = async (req, res) => {
     const { user, pwd } = req.body;
+    var roles= req.body.roles;
+    
+    console.log(roles,"aaaaaaaaaaaa");
     if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' });
 
     // check for duplicate usernames in the db
@@ -16,7 +19,9 @@ const handleNewUser = async (req, res) => {
         //create and store the new user
         const result = await User.create({
             "username": user,
-            "password": hashedPwd
+            "password": hashedPwd,
+            "roles": roles
+
         });
 
         console.log(result);
