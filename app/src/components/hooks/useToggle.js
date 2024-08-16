@@ -1,16 +1,15 @@
 import useLocalStorage from "../../hooks/useLocalStorage";
-
-const useToggle = (key, initValue) => {
-
-    const [value, setValue] = useLocalStorage(key, initValue);
-
-    const toggle = (value) => {
-        setValue(prev =>{
-            return typeof value === 'boolean' ? value : !prev;
+const useToggle = (key,initValue) => {
+    const [value,setValue]=useLocalStorage(key,initValue);
+    
+    const toggle=()=>{
+        setValue(prev=>{
+            return typeof value === 'boolean' ? !prev : prev;
         })
-    }
 
-    return [value, toggle];
+    }
+    return [value,toggle];
 }
 
-export default useToggle
+
+export default useToggle;

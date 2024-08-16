@@ -1,15 +1,15 @@
 import { useRef, useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import useinput from '../hooks/useinput';
-import useToggle from '../components/hooks/useToggle';
-
+import useInput from './hooks/useInput';
+import useToggle from './hooks/useToggle';
 import axios from '../api/axios';
+
+
 const LOGIN_URL = '/auth';
 
 const Login = () => {
     const { setAuth } = useAuth();
-
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
@@ -17,23 +17,25 @@ const Login = () => {
     const userRef = useRef();
     const errRef = useRef();
 
-    const [user, resetUser, userAttribs] = useinput('user','')
+    const [user, resetUser, userAttribs] = useInput('user', '');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [check, togglecheck] = useToggle('persist', false);
+    const [check, toggleCheck] = useToggle('persist', false);
+
     useEffect(() => {
         userRef.current.focus();
-    }, [])
+    }, []);
 
     useEffect(() => {
         setErrMsg('');
-    }, [user, pwd])
+    }, [user, pwd]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(LOGIN_URL,
+            const response = await axios.post(
+                LOGIN_URL,
                 JSON.stringify({ user, pwd }),
                 {
                     headers: { 'Content-Type': 'application/json' },
@@ -41,10 +43,8 @@ const Login = () => {
                 }
             );
             console.log(JSON.stringify(response?.data));
-            //console.log(JSON.stringify(response));
             const accessToken = response?.data?.accessToken;
-            setAuth({ user,  accessToken });
-            //setUser('');
+            setAuth({ user, accessToken });
             resetUser();
             setPwd('');
             navigate(from, { replace: true });
@@ -60,21 +60,13 @@ const Login = () => {
             }
             errRef.current.focus();
         }
-    }
-
-    // const togglepersist = () => {
-    //     setPersist(prev => !prev)
-    // }
-
-    // useEffect(()=> {
-    //     localStorage.setItem('persist', persist);
-
-    // }, [persist])
+    };
 
     return (
-
         <section>
-            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+                {errMsg}
+            </p>
             <h1>Sign In</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="username">Username:</label>
@@ -95,15 +87,15 @@ const Login = () => {
                     value={pwd}
                     required
                 />
-                <button>Sign In</button>
+                <button type="submit">Sign In</button>
                 <div className="persistCheck">
                     <input
-                        type='checkbox'
-                        id='persist'
-                        onChange={togglecheck}
+                        type="checkbox"
+                        id="persist"
+                        onChange={toggleCheck}
                         checked={check}
-                        />
-                        <label htmlFor='persist'>Trust This Device</label>
+                    />
+                    <label htmlFor="persist">Trust This Device</label>
                 </div>
             </form>
             <p>
@@ -113,8 +105,7 @@ const Login = () => {
                 </span>
             </p>
         </section>
+    );
+};
 
-    )
-}
-
-export default Login
+export default Login;
