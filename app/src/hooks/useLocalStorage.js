@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react';
+import {useState,useEffect} from "react";
 
-const getLocalValue = (key, initValue) => {
-    //SSR Next.js
-    if (typeof window === 'undefined') return initValue;
-    //if a value is already store
-    const localValue = JSON.parse(localStorage.getItem(key)); 
 
-    if (localValue) return localValue;
+const getLocalValue = (key,initValue) => {
+   // SSR Next.js
+   console.log(key,'key')
+   console.log(initValue,'value')
+   if (typeof window === 'undefined') return initValue;
 
+    // if a value is already stored
+    const localValue=JSON.parse(localStorage.getItem(key));
+    if(localValue) return localValue;
+    
     // return result of a function
     if (initValue instanceof Function) return initValue();
 
@@ -16,17 +19,15 @@ const getLocalValue = (key, initValue) => {
 }
 
 const useLocalStorage = (key,initValue) => {
-    const [value, setValue] = useState(()=>{
-        return getLocalValue(key, initValue);
+    const [value,setValue]=useState(()=>{
+        return getLocalValue(key,initValue);
     });
-    useEffect(()=> {
-         localStorage.setItem(key, JSON.stringify(value));
-    }, [key, value])
-    return [value, setValue];
+    
+    useEffect(()=>{
+        localStorage.setItem(key,JSON.stringify(value));
+    },[key,value]);
+
+    return [value,setValue];
 }
 
-
-
- 
-
-export default useLocalStorage
+export default useLocalStorage;

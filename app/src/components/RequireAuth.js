@@ -7,7 +7,7 @@ const RequireAuth = ({ allowedRoles }) => {
     const location = useLocation();
     console.log("inside require auth",auth)
     console.log("#######################3")
-    console.log(        auth?.roles?.find(role => allowedRoles?.includes(role)))
+    console.log(auth?.roles?.find(role => allowedRoles?.includes(role)))
 
     const decoded = auth?.accessToken
         ? jwtDecode(auth?.accessToken)
@@ -16,7 +16,7 @@ const RequireAuth = ({ allowedRoles }) => {
     const roles = decoded?.UserInfo?.roles || []
 
     return (
-        auth?.find(role => allowedRoles?.includes(role))
+        roles?.find(role => allowedRoles?.includes(role))
             ? <Outlet />
             : auth?.user
                 ? <Navigate to="/unauthorized" state={{ from: location }} replace />
